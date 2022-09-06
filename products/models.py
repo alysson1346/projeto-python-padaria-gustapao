@@ -2,8 +2,6 @@ import uuid
 from rest_framework.validators import ValidationError
 from django.db import models
 
-# Create your models here.
-
 # PRODUCTS
 # CATEGORIES
 # IMAGES
@@ -24,11 +22,8 @@ class Product(models.Model):
   description = models.TextField()
   price = models.DecimalField(max_digits=8, decimal_places=2)
   is_available = models.BooleanField()
-  ingredients = models.TextField()
-  has_lactoses = models.BooleanField()
-  has_gluten = models.BooleanField()
-  has_egg = models.BooleanField()
-
+  
+  ingredients = models.ManyToManyField('products.Ingredient', related_name='products')
   category = models.ForeignKey('products.Category', on_delete=models.SET_NULL, blank=True, null=True, related_name='products')
   ...
   
@@ -37,3 +32,6 @@ class Category(models.Model):
   name = models.CharField(max_length=50)
   ...
 
+class Ingredient(models.Model):
+  id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+  name = models.CharField(max_length=50)
