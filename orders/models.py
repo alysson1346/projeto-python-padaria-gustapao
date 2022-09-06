@@ -10,4 +10,4 @@ class Order(models.Model):
   total = models.DecimalField(max_digits=10, decimal_places=2)
 
   account = models.ForeignKey("accounts.Account", on_delete=models.CASCADE, related_name="orders")
-  products = models.ManyToManyField("products.Product", on_delete=models.CASCADE, related_name="orders")
+  products = models.ManyToManyField("products.Product", related_name="orders")
