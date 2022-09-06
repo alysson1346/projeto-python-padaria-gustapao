@@ -6,4 +6,3 @@ from .serializers import ProductSerializer
 class ProductListCreateView(generics.ListCreateAPIView):
   permission_classes = [IsStaffOrAdminOrReadOnly]
   serializer_class = ProductSerializer
-  
