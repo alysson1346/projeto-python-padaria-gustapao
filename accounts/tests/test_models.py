@@ -1,10 +1,6 @@
 from xml.dom import ValidationErr
 from django.test import TestCase
 from ..models import Account
-from django.db import IntegrityError
-
-import ipdb
-
 
 class AccountsModelTest(TestCase):
     @classmethod
