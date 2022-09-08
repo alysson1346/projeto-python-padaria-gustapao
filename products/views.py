@@ -11,3 +11,11 @@ class ProductListCreateView(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class ProductDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsStaffOrAdminOrReadOnly]
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
