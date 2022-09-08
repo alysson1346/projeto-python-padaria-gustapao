@@ -14,6 +14,7 @@ class Order(models.Model):
 
 # Tabela pivô order_products
 class Order_Products(models.Model):
+  
   id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
   
   product_id = models.ForeignKey('products.Product', on_delete=models.CASCADE)
