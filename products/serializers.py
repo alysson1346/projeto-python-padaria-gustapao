@@ -33,7 +33,8 @@ class ProductSerializer(serializers.ModelSerializer):
       "is_available",
       "image_file",
     ]
-    
-    category = CategorySerializer()
-    ingredients = IngredientsSerializer(many=True)
+    optional_fields= ['image_file', 'description']
+  
+  category = CategorySerializer()
+  ingredients = IngredientsSerializer(many=True)
 
