@@ -1,5 +1,7 @@
-from django.db import models
 import uuid
+
+from django.db import models
+
 
 #ORDER
 class Order(models.Model):
@@ -20,5 +22,3 @@ class Order_Products(models.Model):
   product_id = models.ForeignKey('products.Product', on_delete=models.CASCADE)
   order_id = models.ForeignKey('orders.Order', on_delete=models.CASCADE)
   quantity = models.IntegerField()
-  
-
