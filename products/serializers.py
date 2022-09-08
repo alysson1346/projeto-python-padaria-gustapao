@@ -1,5 +1,3 @@
-from dataclasses import fields
-
 from rest_framework import serializers
 
 from .models import Category, Ingredient, Product
@@ -34,7 +32,8 @@ class ProductSerializer(serializers.ModelSerializer):
       "is_available",
       "image_file",
     ]
-    extra_kwargs={'image_file':{'required':False},}
+
+    optional_fields= ['image_file', 'description']
     
   category = CategorySerializer()
   ingredients = IngredientsSerializer(many=True)
@@ -56,4 +55,8 @@ class ProductSerializer(serializers.ModelSerializer):
     product.save() 
           
     return product
+
+    
+  
+
 
