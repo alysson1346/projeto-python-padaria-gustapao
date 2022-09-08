@@ -41,7 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
         category_data = validated_data.pop("category")
         ingredients_data = validated_data.pop("ingredients")
 
-        category_obj = Category.objects.create(**category_data)
+        category_obj = Category.objects.get_or_create(**category_data)
         product = Product.objects.create(**validated_data, category=category_obj)
 
         for ingredient in ingredients_data:
