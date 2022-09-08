@@ -18,7 +18,7 @@ def validate_file_size(file):
 class Product(models.Model):
   id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
   name = models.CharField(max_length=50, unique=True)
-  image_file = models.ImageField(validators=[validate_file_size])
+  image_file = models.ImageField(validators=[validate_file_size], blank = True)
   description = models.TextField()
   price = models.DecimalField(max_digits=8, decimal_places=2)
   is_available = models.BooleanField()
