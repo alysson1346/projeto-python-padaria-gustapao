@@ -98,7 +98,7 @@ class DesactivateAccount(generics.UpdateAPIView):
     authentication_classes = [ TokenAuthentication]        
     permission_classes = [OnlyAdmin]    
     queryset = Account.objects.all()
-    serializer_class = Desactivate 
+    serializer_class = SerializerDeactivate 
     
 
 # Login com username, email ou telefone
