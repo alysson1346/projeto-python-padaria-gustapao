@@ -9,7 +9,6 @@ class Account(AbstractUser):
     first_name = models.CharField(max_length = 50)
     last_name = models.CharField(max_length=50)
     password = models.CharField(max_length=200)
-    cellphone = models.CharField(max_length=12, null=True, blank=True)
-
+    cellphone = models.CharField(max_length=12, null=True, blank=True, unique=True)
+    
     REQUIRED_FIELDS = ["first_name", "last_name"]
-
