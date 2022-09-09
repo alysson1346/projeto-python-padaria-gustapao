@@ -85,6 +85,6 @@ class LoginAccount(views.ObtainAuthToken):
         login_user = authenticate(**serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=login_user)
         return Response({"token": token.key})
-        
-    
+
+
 
