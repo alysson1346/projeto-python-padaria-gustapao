@@ -1,4 +1,3 @@
-from statistics import mode
 from rest_framework import serializers
 from .models import Account
 
@@ -36,6 +35,9 @@ class Desactivate(serializers.ModelSerializer):
         model = Account
         fields = ['is_active']
 
-        
-        
+
+class LoginSerializerUsername(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
 
