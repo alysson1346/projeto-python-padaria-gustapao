@@ -1,4 +1,4 @@
-from accounts.views import AcccountDetailView, AccountView, UpgradeToAdminOrStaff, DesactivateAccount, CreateEmployee
+from accounts.views import AcccountDetailView, AccountView, UpgradeToAdminOrStaff, DeactivateAccountView, CreateEmployee
 from rest_framework.authtoken import views
 from django.urls import path
 
