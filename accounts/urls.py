@@ -1,4 +1,4 @@
-from accounts.views import AcccountDetailView, AccountView, UpgradeToAdminOrStaff, DesactivateAccount, CreateEmployee
+from accounts.views import AcccountDetailView, AccountView, UpgradeToAdminOrStaff, DeactivateAccountView, CreateEmployee
 from rest_framework.authtoken import views
 from django.urls import path
 
@@ -8,5 +8,5 @@ urlpatterns = [
     path("employee/", CreateEmployee.as_view()),
     path("<pk>/", AcccountDetailView.as_view()),
     path("<pk>/update-permissions/", UpgradeToAdminOrStaff.as_view()),
-    path("<pk>/management/", DesactivateAccount.as_view()),
+    path("<pk>/management/", DeactivateAccountView.as_view()),
 ]
