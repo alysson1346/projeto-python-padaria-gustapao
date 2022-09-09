@@ -38,4 +38,32 @@ class DesactivateAccount(generics.UpdateAPIView):
     permission_classes = [OnlyAdmin]    
     queryset = Account.objects.all()
     serializer_class = Desactivate 
-    
+
+
+# Login com username, email ou telefone
+
+from rest_framework.authtoken import views
+from rest_framework.authtoken.models import Token
+from rest_framework.views import Request, Response
+from django.shortcuts import get_object_or_404
+from .serializers import LoginSerializerUsername
+from django.contrib.auth import authenticate
+
+class LoginAccount(views.ObtainAuthToken):
+
+    def post(self, request: Request) -> Response:
+        user_dict = request.data
+
+        if request.data.get('email'):
+            username = get_object_or_404(Account, email=request.data['email']).username
+            user_dict['username'] = username
+
+        elif request.data.get('cellphone'):
+            username = get_object_or_404(Account, cellphone=request.data['cellphone']).username
+            user_dict['username'] = username
+
+        serializer = LoginSerializerUsername(data=user_dict)
+        serializer.is_valid(raise_exception=True)
+        login_user = authenticate(**serializer.validated_data)
+        token, _ = Token.objects.get_or_create(user=login_user)
+        return Response({"token": token.key})

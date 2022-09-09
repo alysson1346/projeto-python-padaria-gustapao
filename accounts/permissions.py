@@ -11,7 +11,7 @@ class ReadOnlyAdmin(permissions.BasePermission):
       return False
     
     
-# Permissão onde somente admin ou o própio usuario tem permissão     
+# Permissão onde somente admin ou o própio usuario tem permissão   
 class UpdateAndDelete(permissions.BasePermission):    
     def has_object_permission(self, request, view, obj):            
       if request.user == obj or request.user.is_superuser:
