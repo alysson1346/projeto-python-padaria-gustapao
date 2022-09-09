@@ -3,10 +3,10 @@ from rest_framework.authtoken import views
 from django.urls import path
 
 urlpatterns = [
-    path("login/", views.obtain_auth_token),
-    path("", AccountView.as_view()),
-    path("employee/", CreateEmployee.as_view()),
-    path("<pk>/", AcccountDetailView.as_view()),
-    path("<pk>/update-permissions/", UpgradeToAdminOrStaff.as_view()),
-    path("<pk>/management/", DeactivateAccountView.as_view()),
+    path("login/", views.obtain_auth_token, name="login"),
+    path("", AccountView.as_view(), name="account-view-create"),
+    path("employee/", CreateEmployee.as_view(), name="create-employee"),
+    path("<pk>/", AcccountDetailView.as_view(), name="account-detail"),
+    path("<pk>/update-permissions/", UpgradeToAdminOrStaff.as_view(), name="admin-update"),
+    path("<pk>/management/", DesactivateAccount.as_view(), name="soft-delete"),
 ]

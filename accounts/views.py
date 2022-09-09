@@ -7,8 +7,8 @@ from .permissions import UpdateAndDelete, OnlyAdmin, ReadOnlyAdmin
 
 
 #Cria user comum (Não precisa de permissão), Lista todos users (apenas admin)
+
 class AccountView(SerializerByMethodMixin, generics.ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [ReadOnlyAdmin]
     queryset = Account.objects.all()
 
@@ -19,7 +19,6 @@ class AccountView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
 #Cria funcionario(apenas admin)
 class CreateEmployee(SerializerByMethodMixin, generics.ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [OnlyAdmin]
 
     queryset = Account.objects.filter(is_staff=True)

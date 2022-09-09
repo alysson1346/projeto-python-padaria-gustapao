@@ -1,4 +1,5 @@
 from rest_framework import permissions
+import ipdb
 
 
 # Permissão onde somente admin pode ter acesso a todas as contas
