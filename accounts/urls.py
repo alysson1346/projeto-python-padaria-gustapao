@@ -1,4 +1,6 @@
 from accounts.views import AcccountDetailView, AccountView, UpgradeToAdminOrStaff, DeactivateAccountView, CreateEmployee
+from accounts.views import LoginAccount
+
 from django.urls import path
 
 from accounts.views import LoginAccount
@@ -11,4 +13,3 @@ urlpatterns = [
     path("<pk>/update-permissions/", UpgradeToAdminOrStaff.as_view(), name="admin-update"),
     path("<pk>/management/", DeactivateAccountView.as_view(), name="soft-delete"),
 ]
-

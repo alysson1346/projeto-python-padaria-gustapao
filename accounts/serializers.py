@@ -62,7 +62,6 @@ class SerializerDeactivate(serializers.ModelSerializer):
         fields = ["id", "username", "is_active" ]
         extra_kwargs = {"is_active": {"required": True}, "username": {"read_only": True}, "id": {"read_only": True}}
 
-
 class LoginSerializerUsername(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
