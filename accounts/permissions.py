@@ -8,7 +8,16 @@ class ReadOnlyAdmin(permissions.BasePermission):
       if request.method == "GET" and request.user.is_superuser:
         return True
       if request.method =="POST":
-        return True
+        return True      
+      return False
+    
+    
+# Permissão onde somente admin ou o própio usuario tem permissão   
+class UpdateAndDelete(permissions.BasePermission):    
+    def has_object_permission(self, request, view, obj):            
+      if request.user == obj or request.user.is_superuser:
+        return True      
+
       return False
 
 
