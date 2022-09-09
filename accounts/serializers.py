@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Account
 
 #create, update, delete accounts
-
 class SerializerAccounts(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -62,8 +61,6 @@ class SerializerDeactivate(serializers.ModelSerializer):
         model = Account
         fields = ["id", "username", "is_active" ]
         extra_kwargs = {"is_active": {"required": True}, "username": {"read_only": True}, "id": {"read_only": True}}
-
-
 
 
 class LoginSerializerUsername(serializers.Serializer):
