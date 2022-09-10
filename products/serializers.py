@@ -54,3 +54,25 @@ class ProductSerializer(serializers.ModelSerializer):
             product.ingredients.add(ingredient_obj)
 
         return product
+
+    def update(self, instance: Product, validated_data: dict) -> Product:
+
+        if validated_data.get("ingredients"):
+            ingredients_data = validated_data.pop("ingredients")
+            instance.ingredients.clear()
+
+            for ingredient in ingredients_data:
+                ingredient_obj, _ = Ingredient.objects.get_or_create(**ingredient)
+                instance.ingredients.add(ingredient_obj)
+
+        if validated_data.get("category"):
+            category_data = validated_data.pop("category")
+            category_obj, _ = Category.objects.get_or_create(**category_data)
+            instance.category = category_obj
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance

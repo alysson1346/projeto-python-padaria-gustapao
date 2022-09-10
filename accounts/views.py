@@ -100,7 +100,6 @@ class DesactivateAccount(generics.UpdateAPIView):
     queryset = Account.objects.all()
     serializer_class = SerializerDeactivate 
 
-
 # Login com username, email ou telefone
 class LoginAccount(APIView):
 
