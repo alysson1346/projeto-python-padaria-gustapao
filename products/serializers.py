@@ -7,12 +7,20 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["id", "name"]
+    
+    def create(self, validated_data: dict):
+        category, _ = Category.objects.get_or_create(name=validated_data['name'])
+        return category
 
 
 class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ["id", "name"]
+        
+    def create(self, validated_data: dict):
+        ingredient, _ = Ingredient.objects.get_or_create(name=validated_data['name'])
+        return ingredient
 
 
 class ProductSerializer(serializers.ModelSerializer):
