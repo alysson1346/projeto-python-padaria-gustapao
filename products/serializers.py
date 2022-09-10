@@ -6,13 +6,13 @@ from .models import Category, Ingredient, Product
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "name"]
+        fields = ["name"]
 
 
 class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ["id", "name"]
+        fields = [ "name"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -35,11 +35,11 @@ class ProductSerializer(serializers.ModelSerializer):
     optional_fields = ["image_file", "description"]
 
     def create(self, validated_data: dict) -> Product:
-
+        
         category_data = validated_data.pop("category")
         ingredients_data = validated_data.pop("ingredients")
 
-        category_obj = Category.objects.get_or_create(**category_data)
+        category_obj,_ = Category.objects.get_or_create(**category_data)
         product = Product.objects.create(**validated_data, category=category_obj)
 
         for ingredient in ingredients_data:
