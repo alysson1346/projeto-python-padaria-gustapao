@@ -1,5 +1,4 @@
 import uuid
-
 from django.db import models
 from rest_framework.validators import ValidationError
 
@@ -35,13 +34,11 @@ class Product(models.Model):
         null=True,
         related_name="products",
     )
-    ...
 
 
 class Category(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=50)
-    ...
 
 
 class Ingredient(models.Model):

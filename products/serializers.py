@@ -32,15 +32,14 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "category",
             "price",
             "description",
+            "category",
             "ingredients",
             "is_available",
             "image_file",
         ]
-
-    optional_fields = ["image_file", "description"]
+        optional_fields = ["image_file", "description"]
 
     def create(self, validated_data: dict) -> Product:
         category_data = validated_data.pop("category")
@@ -76,3 +75,7 @@ class ProductSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+
+
