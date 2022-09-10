@@ -123,3 +123,4 @@ class LoginAccount(APIView):
         token, _ = Token.objects.get_or_create(user=login_user)
         return Response({"token": token.key})
 
+	
