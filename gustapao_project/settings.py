@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+import django_on_heroku
 
 import dj_database_url
 import dotenv
@@ -172,3 +173,6 @@ if DATABASE_URL:
     )
     DATABASES['default'].update(db_from_env)
     DEBUG = False
+
+#Conectar ao add-on do PostgreSQL no ambiente do Heroku.
+django_on_heroku.settings(locals())
