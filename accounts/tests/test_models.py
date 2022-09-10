@@ -1,4 +1,3 @@
-from xml.dom import ValidationErr
 from django.test import TestCase
 from ..models import Account
 
