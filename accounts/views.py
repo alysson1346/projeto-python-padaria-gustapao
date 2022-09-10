@@ -99,7 +99,6 @@ class DesactivateAccount(generics.UpdateAPIView):
     permission_classes = [OnlyAdmin]    
     queryset = Account.objects.all()
     serializer_class = SerializerDeactivate 
-    
 
 # Login com username, email ou telefone
 class LoginAccount(APIView):
@@ -123,3 +122,4 @@ class LoginAccount(APIView):
         token, _ = Token.objects.get_or_create(user=login_user)
         return Response({"token": token.key})
 
+	

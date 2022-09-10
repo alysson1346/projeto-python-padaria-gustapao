@@ -1,6 +1,7 @@
 import uuid
-from rest_framework.validators import ValidationError
+
 from django.db import models
+from rest_framework.validators import ValidationError
 
 # PRODUCTS
 # CATEGORIES
