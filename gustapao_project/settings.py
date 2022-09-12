@@ -46,7 +46,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ['rest_framework', 'rest_framework.authtoken', 'drf_spectacular', "whitenoise.middleware.WhiteNoiseMiddleware",]
+THIRD_PARTY_APPS = ['rest_framework', 'rest_framework.authtoken', 'drf_spectacular',]
 
 MY_APPS= ['accounts', 'orders', 'products',]
 
@@ -173,10 +173,6 @@ if DATABASE_URL:
     )
     DATABASES['default'].update(db_from_env)
     DEBUG = False
-
-STATIC_ROOT= BASE_DIR / 'staticfiles'
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 #Conectar ao add-on do PostgreSQL no ambiente do Heroku.
 django_on_heroku.settings(locals())
