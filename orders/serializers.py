@@ -1,10 +1,14 @@
 from datetime import datetime
+from itertools import product
 
 from accounts.models import Account
 from django.shortcuts import get_object_or_404
 from products.models import Product
+from orders.models import Order_Products
 from products.serializers import ProductSerializer
 from rest_framework import serializers
+import ipdb
+
 
 from orders.models import Order_Products
 
@@ -35,15 +39,20 @@ class OrderSerializer(serializers.ModelSerializer):
 
     products = OrderProductsSerializer(many=True, source="order_products_set")
     account = AccountOrderSerializer(read_only=True)
-    # total = serializers.SerializerMethodField()
+    total = serializers.SerializerMethodField()
     
-    # def get_total(self, obj:Order):
-    #     products:Product = obj.order_products_set
+    def get_total(self, obj:Order):
+        products = obj.order_products_set.values()
+        total = 0
+
+        for product in products:
+
+            product_price = get_object_or_404(Product, id = product['product_id'])
+            subtotal = total + product_price.price
+            total = subtotal * product['quantity']                     
+      
+        return total
         
-    #     for product in products:
-            
-        
-    #     return subtotal
 
     def create(self, validated_data: dict) -> Product:
         products = validated_data.pop("order_products_set")
