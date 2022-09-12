@@ -16,5 +16,3 @@ WORKDIR /code
 
 # copiando todos os arquivos para o diretório de trabalho
 COPY . /code/
-
-RUN python manage.py collectstatic --noinput
