@@ -19,12 +19,9 @@ class OrderProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order_Products
         fields = [
-            "order",
             "product",
             "quantity",
         ]
-        read_only_fields = ["order"]
-    
 
 class AccountOrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,7 +55,7 @@ class OrderSerializer(serializers.ModelSerializer):
         products = validated_data.pop("order_products_set")
 
         order:Order = Order.objects.create(**validated_data)
-        
+
         for product in products:
             product_obj = get_object_or_404(Product, id=product['product'].id)
             order.products.add(product_obj, through_defaults={"quantity": product['quantity']})

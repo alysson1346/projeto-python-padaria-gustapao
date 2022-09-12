@@ -7,7 +7,11 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["id", "name"]
-    
+
+    def create(self, validated_data: dict):
+        category, _ = Category.objects.get_or_create(name=validated_data['name'])
+        return category
+
     def create(self, validated_data: dict):
         category, _ = Category.objects.get_or_create(name=validated_data['name'])
         return category
@@ -17,10 +21,11 @@ class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = [ "name"]
-        
+
     def create(self, validated_data: dict):
         ingredient, _ = Ingredient.objects.get_or_create(name=validated_data['name'])
         return ingredient
+
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     ingredients = IngredientsSerializer(many=True)
@@ -30,15 +35,14 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "category",
             "price",
             "description",
+            "category",
             "ingredients",
             "is_available",
             "image_file",
         ]
-
-    optional_fields = ["image_file", "description"]
+        optional_fields = ["image_file", "description"]
 
     def create(self, validated_data: dict) -> Product:
         category_data = validated_data.pop("category")

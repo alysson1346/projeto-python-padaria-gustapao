@@ -1,0 +1,1 @@
+web: gunicorn gustapao_project.wsgi
