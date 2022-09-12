@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
-import django_on_heroku
 
 import dj_database_url
+import django_on_heroku
 import dotenv
 
 dotenv.load_dotenv()
@@ -46,7 +46,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ['rest_framework', 'rest_framework.authtoken', 'drf_spectacular']
+THIRD_PARTY_APPS = ['rest_framework', 'rest_framework.authtoken', 'drf_spectacular', "whitenoise.middleware.WhiteNoiseMiddleware",]
 
 MY_APPS= ['accounts', 'orders', 'products',]
 
@@ -174,5 +174,10 @@ if DATABASE_URL:
     DATABASES['default'].update(db_from_env)
     DEBUG = False
 
+STATIC_ROOT= BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 #Conectar ao add-on do PostgreSQL no ambiente do Heroku.
 django_on_heroku.settings(locals())
+
