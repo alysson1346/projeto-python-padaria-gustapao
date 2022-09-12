@@ -21,7 +21,6 @@ class OrderProductsSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["order"]
 
-
 class AccountOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -36,14 +35,6 @@ class OrderSerializer(serializers.ModelSerializer):
     products = OrderProductsSerializer(many=True, source="order_products_set")
     account = AccountOrderSerializer(read_only=True)
     # total = serializers.SerializerMethodField()
-
-    # def get_total(self, obj:Order):
-    #     products:Product = obj.order_products_set
-
-    #     for product in products:
-
-
-    #     return subtotal
 
     def create(self, validated_data: dict) -> Product:
         products = validated_data.pop("order_products_set")
