@@ -1,7 +1,8 @@
 from datetime import datetime
-from itertools import product
+from datetime import date
+from rest_framework.views import Response, status
+from rest_framework.validators import ValidationError
 
-import ipdb
 from accounts.models import Account
 from django.shortcuts import get_object_or_404
 from products.models import Product
@@ -54,6 +55,16 @@ class OrderSerializer(serializers.ModelSerializer):
             total = subtotal * product['quantity']
 
         return total
+
+
+    def validate_withdrawal_date(self, obj):
+        request_withdrawal = obj 
+        today = datetime.today()
+        
+        if request_withdrawal.date() < today.date() or request_withdrawal.date() == today.date():
+            raise ValidationError("Details: orders can be placed at least one day in advance")            
+        
+        return obj
 
 
     def create(self, validated_data: dict) -> Product:
