@@ -15,7 +15,6 @@ class OrderView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
 
     def perform_create(self, serializer):
-        # ipdb.set_trace()
         serializer.save(account=self.request.user)
 
 
