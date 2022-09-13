@@ -1,16 +1,22 @@
 from datetime import datetime
 from itertools import product
 
+import ipdb
 from accounts.models import Account
 from django.shortcuts import get_object_or_404
 from products.models import Product
-from orders.models import Order_Products
 from products.serializers import ProductSerializer
 from rest_framework import serializers
-import ipdb
+
 from orders.models import Order_Products
+
 from .models import Order
 
+
+class ProductSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        field = ['id', 'name', 'price', 'image_file']
 
 class OrderProductsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,6 +26,8 @@ class OrderProductsSerializer(serializers.ModelSerializer):
             "quantity",
         ]
 
+    product = ProductSimpleSerializer()
+
 class AccountOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -28,7 +36,7 @@ class AccountOrderSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ["id", "comment", "withdrawal_date", "is_finished", "total", "account", "products", "order_status"]
+        fields = ["id","withdrawal_date", "comment", "total", "order_status", "is_finished", "account", "products",]
         read_only_fields= ["total", "account", "order_status"]
 
     products = OrderProductsSerializer(many=True, source="order_products_set")
