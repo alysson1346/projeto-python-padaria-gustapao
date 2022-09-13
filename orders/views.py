@@ -5,7 +5,12 @@ from accounts.models import Account
 
 from orders.models import Order
 from orders.permissions import IsOwnerOrStaffOrAdmin, IsAdminOrStaff
-from orders.serializers import OrderSerializer, OrderStatusSerializer
+from orders.serializers import (
+    OrderSerializer,
+    OrderStatusSerializer,
+    OrderFilterSerializer,
+)
+from django.shortcuts import get_list_or_404
 
 
 class OrderView(generics.ListCreateAPIView):
@@ -22,11 +27,16 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [IsOwnerOrStaffOrAdmin]
     serializer_class = OrderSerializer
 
+
 class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):
 
     permission_classes = [IsAdminOrStaff]
 
     queryset = Order.objects.all()
-    serializer_map = {
-      'PATCH': OrderStatusSerializer
-    }
+    serializer_map = {"PATCH": OrderStatusSerializer}
+
+
+class OrderFilterView(generics.ListAPIView):
+    # permission_classes = [IsOwnerOrStaffOrAdmin]
+    queryset = Order.objects.all()
+    serializer_class = OrderFilterSerializer
