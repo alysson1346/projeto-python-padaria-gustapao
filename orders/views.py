@@ -6,6 +6,7 @@ from accounts.models import Account
 from orders.models import Order
 from orders.permissions import IsOwnerOrStaffOrAdmin, IsAdminOrStaff
 from orders.serializers import OrderSerializer, OrderStatusSerializer
+import ipdb
 
 
 class OrderView(generics.ListCreateAPIView):
@@ -14,6 +15,7 @@ class OrderView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
 
     def perform_create(self, serializer):
+        # ipdb.set_trace()
         serializer.save(account=self.request.user)
 
 

@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from products.models import Product
 from products.serializers import ProductSerializer
 from rest_framework import serializers
+import ipdb
 
 from orders.models import Order_Products
 
@@ -17,7 +18,7 @@ from .models import Order
 class ProductSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        field = ['id', 'name', 'price', 'image_file']
+        fields = ['id', 'name', 'price', 'image_file']
 
 class OrderProductsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,14 +36,15 @@ class AccountOrderSerializer(serializers.ModelSerializer):
         fields=['first_name', 'last_name', 'cellphone']
 
 class OrderSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Order
-        fields = ["id","withdrawal_date", "comment", "total", "order_status", "is_finished", "account", "products",]
+        fields = ["id","withdrawal_date", "comment", "total", "order_status", "is_finished", "account", "products"]
         read_only_fields= ["total", "account", "order_status"]
 
-    products = OrderProductsSerializer(many=True, source="order_products_set")
-    account = AccountOrderSerializer(read_only=True)
-    total = serializers.SerializerMethodField()
+        products = OrderProductsSerializer(many=True, source="order_products_set")
+        account = AccountOrderSerializer(read_only=True)
+        total = serializers.SerializerMethodField()
 
     def get_total(self, obj:Order):
         products = obj.order_products_set.values()
@@ -56,18 +58,17 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return total
 
-
     def validate_withdrawal_date(self, obj):
-        request_withdrawal = obj 
+        request_withdrawal = obj
         today = datetime.today()
-        
+
         if request_withdrawal.date() < today.date() or request_withdrawal.date() == today.date():
-            raise ValidationError("Details: orders can be placed at least one day in advance")            
-        
+            raise ValidationError("Details: orders can be placed at least one day in advance")
+
         return obj
 
-
-    def create(self, validated_data: dict) -> Product:
+    def create(self, validated_data) -> Product:
+        # ipdb.set_trace()
         products = validated_data.pop("order_products_set")
 
         order:Order = Order.objects.create(**validated_data)
@@ -77,6 +78,7 @@ class OrderSerializer(serializers.ModelSerializer):
             order.products.add(product_obj, through_defaults={"quantity": product['quantity']})
 
         return order
+
 
 class OrderStatusSerializer(serializers.ModelSerializer):
     class Meta:
