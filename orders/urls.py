@@ -3,5 +3,6 @@ from orders import views
 
 urlpatterns = [
     path('', views.OrderView.as_view(), name='base-order-url'),
-    path('<pk>', views.OrderDetailView.as_view(), name='detail-order-url')
+    path('<pk>/', views.OrderDetailView.as_view(), name='detail-order-url'),
+    path('status/<pk>/', views.OrderStatusView.as_view(), name='update-status')
 ]
