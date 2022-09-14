@@ -10,7 +10,6 @@ from rest_framework.views import Response, Request, APIView, status
 from accounts.models import Account
 from orders.models import Order
 from orders.permissions import (
-    IsOwnerOrStaffOrAdmin,
     IsAdminOrStaff,
     IsOwner,
     IsOwnerAdminOrStaff,
