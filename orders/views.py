@@ -1,39 +1,34 @@
 from datetime import datetime
-from rest_framework import generics
-from orders import serializers
-from utils.mixins import SerializerByMethodMixin
-from rest_framework.views import Response, Request
-from datetime import datetime
-from rest_framework.validators import ValidationError
 
-from rest_framework.views import Response, Request, APIView, status
 from accounts.models import Account
-from orders.models import Order
-from rest_framework import permissions
-from orders.permissions import (
-    IsAdminOrStaff,
-    IsOwner,
-    IsOwnerAdminOrStaff,
-)
-from orders.serializers import (
-    OrderSerializer,
-    OrderStatusSerializer,
-)
 from django.forms.models import model_to_dict
+from rest_framework import generics, permissions
+from rest_framework.validators import ValidationError
+from rest_framework.views import APIView, Request, Response, status
+from utils.mixins import SerializerByMethodMixin
+
+from orders import serializers
+from orders.models import Order
+from orders.permissions import IsAdminOrStaff, IsOwner, IsOwnerAdminOrStaff
+from orders.serializers import OrderSerializer, OrderStatusSerializer
 
 
-class OrderListAllView(SerializerByMethodMixin, generics.ListCreateAPIView):
+class OrderListAllView(SerializerByMethodMixin, generics.ListAPIView):
 
     permission_classes = [IsAdminOrStaff]
-    serializer_class= OrderSerializer
     queryset = Order.objects.all()
+    serializer_map = {
+        "GET": OrderSerializer
+    }
 
 
-class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
+class OrderOwnerListView(SerializerByMethodMixin, generics.ListAPIView):
 
     permission_classes = [IsOwner]
-    serializer_class = OrderSerializer
     queryset = Order.objects.all()
+    serializer_map = {
+        'GET': OrderSerializer,
+    }
 
     def list(self, request: Request, *args, **kwargs):
         queryset = self.queryset.filter(account=request.user)
@@ -47,10 +42,12 @@ class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
         return Response(serializer.data)
 
 
-class OrderCreateView(SerializerByMethodMixin, generics.ListCreateAPIView):
+class OrderCreateView(SerializerByMethodMixin, generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'POST': OrderSerializer,
+    }
 
     def perform_create(self, serializer):
         serializer.save(account=self.request.user)
@@ -61,36 +58,28 @@ class OrderDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroyAPI
     permission_classes = [IsOwnerAdminOrStaff]
 
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer,
+        'DELETE': OrderSerializer,
+        'PATCH': OrderSerializer
+    }
 
-
-    # def perform_destroy(self, instance):
-    #     ipdb.set_trace()
-
-    #     request_withdrawal = instance.withdrawal_date
-    #     today = datetime.today()
-
-    #     if not self.request.user.is_superuser:
-    #         instance.delete()
-
-    #     if request_withdrawal.date() < today.date() or request_withdrawal.date() == today.date():
-    #         raise ValidationError("Details: orders can be placed at least one day in advance")
-
-    #     instance.delete()
 
 
 class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):
-
     permission_classes = [IsAdminOrStaff]
-    serializer_class = OrderStatusSerializer
     queryset = Order.objects.all()
-    serializer_class = OrderStatusSerializer
+    serializer_map = {
+        'PATCH': OrderStatusSerializer
+    }
 
 
-class OrderForTodayView(generics.ListAPIView):
-    # permission_classes = [IsOwnerOrStaffOrAdmin]
+class OrderForTodayView(SerializerByMethodMixin, generics.ListAPIView):
+    permission_classes = [IsOwnerAdminOrStaff]
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer
+    }
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -111,10 +100,12 @@ class OrderForTodayView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class OrderFilteredByDateView(generics.ListAPIView):
-    # permission_classes = [IsOwnerOrStaffOrAdmin]
+class OrderFilteredByDateView(SerializerByMethodMixin, generics.ListAPIView):
+    permission_classes = [IsOwnerAdminOrStaff]
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer
+    }
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())

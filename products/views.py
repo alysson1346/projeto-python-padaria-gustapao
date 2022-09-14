@@ -27,6 +27,7 @@ class IngredientsListCreateView(generics.ListCreateAPIView):
 
 
 class IngredientDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminOrStaffOrReadOnly]
     queryset = Ingredient.objects.all()
     serializer_class = IngredientsSerializer
 
@@ -36,5 +37,6 @@ class CategoryView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
 
 class CategoryDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAdminOrStaffOrReadOnly]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

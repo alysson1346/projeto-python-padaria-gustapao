@@ -25,7 +25,6 @@ from django.contrib.auth import authenticate
 class AccountView(SerializerByMethodMixin, generics.ListCreateAPIView):
     permission_classes = [ReadOnlyAdmin]
     queryset = Account.objects.all()
-    serializer_class = SerializerAccounts
     serializer_map = {
         'GET': SerializerAccounts,
         'POST': SerializerCreateCommonUserAccounts,
@@ -36,7 +35,6 @@ class CreateEmployee(SerializerByMethodMixin, generics.ListCreateAPIView):
     permission_classes = [OnlyAdmin]
 
     queryset = Account.objects.filter(is_staff=True)
-    serializer_class = SerializerEmployee
     serializer_map = {
         'GET': SerializerEmployee,
         'POST': SerializerEmployee,
@@ -47,8 +45,7 @@ class CreateEmployee(SerializerByMethodMixin, generics.ListCreateAPIView):
 class AcccountDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [UpdateAndDelete]
 
-    queryset = Account.objects.all()
-    serializer_class = SerializerAccounts,
+    queryset = Account.objects.all(),
     serializer_map = {
         'GET': SerializerAccounts,
         'PATCH': SerializerUpdateAccounts,
@@ -57,10 +54,8 @@ class AcccountDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroy
 
 # Admin atualiza qualquer user como funcionário ou admin
 class UpgradeToAdminOrStaff(SerializerByMethodMixin, generics.UpdateAPIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [OnlyAdmin]
 
-    serializer_class = UpgradeToAdminOrStaff
     queryset = Account.objects.all()
     serializer_map = {
         'PATCH': UpgradeToAdminOrStaff
@@ -71,7 +66,6 @@ class UpgradeToAdminOrStaff(SerializerByMethodMixin, generics.UpdateAPIView):
 class DeactivateAccountView(SerializerByMethodMixin, generics.UpdateAPIView):
     permission_classes = [OnlyAdmin]
 
-    serializer_class = SerializerDeactivate
     queryset = Account.objects.all()
     serializer_map = {
         'PATCH': SerializerDeactivate
@@ -96,17 +90,14 @@ class LoginAccount(views.ObtainAuthToken):
         login_user = authenticate(**serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=login_user)
         return Response({"token": token.key})
-        
-# Admin pode desativar funcionário    
-class DesactivateAccount(generics.UpdateAPIView):
-    authentication_classes = [ TokenAuthentication]        
-    permission_classes = [OnlyAdmin]    
+
+# Admin pode desativar funcionário
+class DeactivateAccount(generics.UpdateAPIView):
+    permission_classes = [OnlyAdmin]
     queryset = Account.objects.all()
-    serializer_class = SerializerDeactivate 
 
 # Login com username, email ou telefone
 class LoginAccount(APIView):
-
     def post(self, request: Request) -> Response:
         user_dict = request.data
 
@@ -125,5 +116,3 @@ class LoginAccount(APIView):
         login_user = authenticate(**serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=login_user)
         return Response({"token": token.key})
-
-	
