@@ -12,10 +12,6 @@ class CategorySerializer(serializers.ModelSerializer):
         category, _ = Category.objects.get_or_create(name=validated_data['name'])
         return category
 
-    def create(self, validated_data: dict):
-        category, _ = Category.objects.get_or_create(name=validated_data['name'])
-        return category
-
 
 class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:

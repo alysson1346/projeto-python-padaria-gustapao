@@ -1,6 +1,8 @@
 from rest_framework import generics
 from utils.mixins import SerializerByMethodMixin
 from rest_framework.views import Response, Request
+from datetime import datetime
+from rest_framework.validators import ValidationError
 
 from orders.models import Order
 from orders.permissions import IsAdminOrStaff, IsOwner, IsOwnerAdminOrStaff
@@ -18,26 +20,25 @@ class OrderListAllView(SerializerByMethodMixin, generics.ListCreateAPIView):
     }
 
 
-# class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
-#     #Ainda n está funcionando
-#     permission_classes = [IsOwner]
+class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
-#     queryset = Order.objects.all()
-#     serializer_map = {
-#         'GET': OrderSerializer,
-#     }
+    permission_classes = [IsOwner]
 
-#     def list(self, request: Request, *args, **kwargs):
-#         queryset = self.filter_queryset(self.get_queryset())
-#         queryset.filter(account=request.user)
+    queryset = Order.objects.all()
+    serializer_map = {
+        'GET': OrderSerializer,
+    }
 
-#         page = self.paginate_queryset(queryset)
-#         if page is not None:
-#             serializer = self.get_serializer(page, many=True)
-#             return self.get_paginated_response(serializer.data)
+    def list(self, request: Request, *args, **kwargs):
+        queryset = self.queryset.filter(account=request.user)
 
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class OrderCreateView(SerializerByMethodMixin, generics.ListCreateAPIView):
@@ -61,6 +62,20 @@ class OrderDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroyAPI
         'DELETE': OrderSerializer,
         'PATCH': OrderSerializer
     }
+
+    # def perform_destroy(self, instance):
+    #     ipdb.set_trace()
+
+    #     request_withdrawal = instance.withdrawal_date
+    #     today = datetime.today()
+
+    #     if not self.request.user.is_superuser:
+    #         instance.delete()
+
+    #     if request_withdrawal.date() < today.date() or request_withdrawal.date() == today.date():
+    #         raise ValidationError("Details: orders can be placed at least one day in advance")
+
+    #     instance.delete()
 
 
 class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):

@@ -177,8 +177,8 @@ if DATABASE_URL:
 
 STATIC_ROOT= BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 #Conectar ao add-on do PostgreSQL no ambiente do Heroku.
 django_on_heroku.settings(locals())
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

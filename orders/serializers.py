@@ -1,10 +1,8 @@
 from datetime import datetime
 from rest_framework.validators import ValidationError
-
 from accounts.models import Account
 from django.shortcuts import get_object_or_404
 from products.models import Product
-from products.serializers import ProductSerializer
 from rest_framework import serializers
 import ipdb
 
@@ -68,6 +66,25 @@ class OrderSerializer(serializers.ModelSerializer):
             order.products.add(product_obj, through_defaults={"quantity": product['quantity']})
 
         return order
+
+    def update(self, instance: Order, validated_data: dict) -> Product:
+
+        obj = instance.withdrawal_date
+        self.validate_withdrawal_date(obj)
+
+        orders_data = validated_data.pop("order_products_set")
+
+        instance.products.clear()
+        for product in orders_data:
+            product_obj = get_object_or_404(Product, id=product['product'].id)
+            instance.products.add(product_obj, through_defaults={"quantity": product['quantity']})
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
 
 
 class OrderStatusSerializer(serializers.ModelSerializer):
