@@ -44,9 +44,9 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["total", "account", "order_status"]
 
-        products = OrderProductsSerializer(many=True, source="order_products_set")
-        account = AccountOrderSerializer(read_only=True)
-        total = serializers.SerializerMethodField()
+    products = OrderProductsSerializer(many=True, source="order_products_set")
+    account = AccountOrderSerializer(read_only=True)
+    total = serializers.SerializerMethodField()
 
     def get_total(self, obj: Order):
         products = obj.order_products_set.values()
