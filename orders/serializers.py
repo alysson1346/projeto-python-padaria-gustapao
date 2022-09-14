@@ -32,12 +32,19 @@ class AccountOrderSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Order
-        fields = ["id","withdrawal_date", "comment", "total", "order_status", "is_finished", "account", "products",]
-        read_only_fields= ["total", "account", "order_status"]
-
+        fields = [
+            "id",
+            "withdrawal_date",
+            "comment",
+            "total",
+            "order_status",
+            "is_finished",
+            "account",
+            "products",
+        ]
+        read_only_fields = ["total", "account", "order_status"]
 
     products = OrderProductsSerializer(many=True, source="order_products_set")
     account = AccountOrderSerializer(read_only=True)
@@ -48,7 +55,7 @@ class OrderSerializer(serializers.ModelSerializer):
         total = 0
 
         for product in products:
-            product_price = get_object_or_404(Product, id = product['product_id'])
+            product_price = get_object_or_404(Product, id=product["product_id"])
             subtotal = total + product_price.price
             total = subtotal * product["quantity"]
 
@@ -58,8 +65,13 @@ class OrderSerializer(serializers.ModelSerializer):
         request_withdrawal = obj
         today = datetime.today()
 
-        if request_withdrawal.date() < today.date() or request_withdrawal.date() == today.date():
-            raise ValidationError("Details: orders can be placed at least one day in advance")
+        if (
+            request_withdrawal.date() < today.date()
+            or request_withdrawal.date() == today.date()
+        ):
+            raise ValidationError(
+                "Details: orders can be placed at least one day in advance"
+            )
 
         return obj
 
@@ -82,17 +94,3 @@ class OrderStatusSerializer(serializers.ModelSerializer):
         model = Order
         fields = ["id", "order_status"]
         extra_kwargs = {"order_status": {"required": True}}
-
-
-class OrderFilterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = "__all__"
-
-    def get(self, validated_data: dict):
-        withdrawal_date_param = self.request.query_params.get("withdrawal_date")
-        orders_on_date = Order.objects.filter(
-            withdrawal_date__contains=withdrawal_date_param
-        )
-
-        return orders_on_date
