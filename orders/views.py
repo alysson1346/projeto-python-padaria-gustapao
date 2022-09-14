@@ -25,21 +25,15 @@ from django.forms.models import model_to_dict
 class OrderListAllView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
     permission_classes = [IsAdminOrStaff]
-
+    serializer_class= OrderSerializer
     queryset = Order.objects.all()
-    serializer_map = {
-        "GET": OrderSerializer,
-    }
 
 
 class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
     permission_classes = [IsOwner]
-
+    serializer_class = OrderSerializer
     queryset = Order.objects.all()
-    serializer_map = {
-        'GET': OrderSerializer,
-    }
 
     def list(self, request: Request, *args, **kwargs):
         queryset = self.queryset.filter(account=request.user)
@@ -56,9 +50,7 @@ class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
 class OrderCreateView(SerializerByMethodMixin, generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Order.objects.all()
-    serializer_map = {
-        "POST": OrderSerializer,
-    }
+    serializer_class = OrderSerializer
 
     def perform_create(self, serializer):
         serializer.save(account=self.request.user)
@@ -69,11 +61,8 @@ class OrderDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroyAPI
     permission_classes = [IsOwnerAdminOrStaff]
 
     queryset = Order.objects.all()
-    serializer_map = {
-        "GET": OrderSerializer,
-        "DELETE": OrderSerializer,
-        "PATCH": OrderSerializer,
-    }
+    serializer_class = OrderSerializer
+
 
     # def perform_destroy(self, instance):
     #     ipdb.set_trace()
@@ -93,9 +82,9 @@ class OrderDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroyAPI
 class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):
 
     permission_classes = [IsAdminOrStaff]
-
+    serializer_class = OrderStatusSerializer
     queryset = Order.objects.all()
-    serializer_map = {"PATCH": OrderStatusSerializer}
+    serializer_class = OrderStatusSerializer
 
 
 class OrderForTodayView(generics.ListAPIView):
