@@ -4,6 +4,12 @@ omit =
     venv/*
     project_base/*
     manage.py
+    *wsgi*
+    *asgi*
+    *utils*
+include =
+    tests/*
 
 [report]
 show_missing = True
+skip_empty = True

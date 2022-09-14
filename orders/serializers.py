@@ -68,7 +68,7 @@ class OrderSerializer(serializers.ModelSerializer):
             or request_withdrawal.date() == today.date()
         ):
             raise ValidationError(
-                "Details: orders can be placed at least one day in advance"
+                "Details: orders have to be placed at least one day in advance"
             )
 
         return obj
@@ -91,12 +91,13 @@ class OrderSerializer(serializers.ModelSerializer):
         obj = instance.withdrawal_date
         self.validate_withdrawal_date(obj)
 
-        orders_data = validated_data.pop("order_products_set")
+        if validated_data.get("order_products_set"):
+            orders_data = validated_data.pop("order_products_set")
+            instance.products.clear()
 
-        instance.products.clear()
-        for product in orders_data:
-            product_obj = get_object_or_404(Product, id=product['product'].id)
-            instance.products.add(product_obj, through_defaults={"quantity": product['quantity']})
+            for product in orders_data:
+                product_obj = get_object_or_404(Product, id=product['product'].id)
+                instance.products.add(product_obj, through_defaults={"quantity": product['quantity']})
 
         for key, value in validated_data.items():
             setattr(instance, key, value)

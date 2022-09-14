@@ -9,6 +9,7 @@ from rest_framework.validators import ValidationError
 from rest_framework.views import Response, Request, APIView, status
 from accounts.models import Account
 from orders.models import Order
+from rest_framework import permissions
 from orders.permissions import (
     IsAdminOrStaff,
     IsOwner,
@@ -53,7 +54,7 @@ class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
 
 class OrderCreateView(SerializerByMethodMixin, generics.ListCreateAPIView):
-
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Order.objects.all()
     serializer_map = {
         "POST": OrderSerializer,
