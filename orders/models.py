@@ -8,6 +8,9 @@ class OrderStatusChoices(models.TextChoices):
   DEFAULT = "Seu pedido está sendo analisado"
 
 class Order(models.Model):
+  class Meta:
+    ordering = ['-id']
+  
   id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
   withdrawal_date = models.DateTimeField()
   comment = models.TextField()

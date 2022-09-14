@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class Account(AbstractUser):
+    class Meta:
+        ordering = ['-id']
+    
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
