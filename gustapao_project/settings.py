@@ -27,7 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
-# SECRET_KEY="django-insecure-yu+(yv0$=q4ck^c+_z!%)q$ktgpcqobd#0b@#nv%fo+uex5#ah"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -179,6 +178,3 @@ STATIC_ROOT= BASE_DIR / 'staticfiles'
 
 #Conectar ao add-on do PostgreSQL no ambiente do Heroku.
 django_on_heroku.settings(locals())
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
