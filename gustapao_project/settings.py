@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 
 import dj_database_url
-import django_on_heroku
 import dotenv
 
 dotenv.load_dotenv()
@@ -174,10 +173,3 @@ if DATABASE_URL:
     )
     DATABASES['default'].update(db_from_env)
     DEBUG = False
-
-STATIC_ROOT= BASE_DIR / 'staticfiles'
-
-#Conectar ao add-on do PostgreSQL no ambiente do Heroku.
-django_on_heroku.settings(locals())
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
