@@ -38,6 +38,7 @@ class CategoriesViewTest(APITestCase):
         cls.admin_token = Token.objects.create(user=cls.admin_account)
         cls.common_account= Account.objects.create_user(**cls.common_user)
         cls.common_token = Token.objects.create(user=cls.common_account)
+
     def test_list_all_categories(self):
         expected_status_code = status.HTTP_200_OK
         response = self.client.get(self.base_category_url)
