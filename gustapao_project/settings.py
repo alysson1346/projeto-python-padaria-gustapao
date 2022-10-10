@@ -100,7 +100,7 @@ else:
             "NAME": os.getenv("POSTGRES_DB"),
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-            "HOST": "db",
+            "HOST": "127.0.0.1",
             "PORT": 5432,
         },
 
@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE' : 10,
+    'PAGE_SIZE' : 5,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 

@@ -19,20 +19,26 @@ from orders.serializers import (
     OrderSerializer,
     OrderStatusSerializer,
 )
-from django.forms.models import model_to_dict
+from orders.permissions import IsAdminOrStaff
 
 
 class OrderListAllView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
     permission_classes = [IsAdminOrStaff]
-    serializer_class= OrderSerializer
+    #serializer_class= OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer
+    }
     queryset = Order.objects.all()
 
 
 class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
 
     permission_classes = [IsOwner]
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer
+    }
+    #serializer_class = OrderSerializer
     queryset = Order.objects.all()
 
     def list(self, request: Request, *args, **kwargs):
@@ -50,7 +56,11 @@ class OrderOwnerListView(SerializerByMethodMixin, generics.ListCreateAPIView):
 class OrderCreateView(SerializerByMethodMixin, generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer,
+        'POST': OrderSerializer,
+    }
+    # serializer_class = OrderSerializer
 
     def perform_create(self, serializer):
         serializer.save(account=self.request.user)
@@ -61,22 +71,12 @@ class OrderDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroyAPI
     permission_classes = [IsOwnerAdminOrStaff]
 
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_map = {
+        'GET': OrderSerializer,
+        'PATCH': OrderSerializer,
+    }
+    #serializer_class = OrderSerializer
 
-
-    # def perform_destroy(self, instance):
-    #     ipdb.set_trace()
-
-    #     request_withdrawal = instance.withdrawal_date
-    #     today = datetime.today()
-
-    #     if not self.request.user.is_superuser:
-    #         instance.delete()
-
-    #     if request_withdrawal.date() < today.date() or request_withdrawal.date() == today.date():
-    #         raise ValidationError("Details: orders can be placed at least one day in advance")
-
-    #     instance.delete()
 
 
 class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):
@@ -88,7 +88,7 @@ class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):
 
 
 class OrderForTodayView(generics.ListAPIView):
-    # permission_classes = [IsOwnerOrStaffOrAdmin]
+    permission_classes = [IsAdminOrStaff]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
@@ -112,7 +112,7 @@ class OrderForTodayView(generics.ListAPIView):
 
 
 class OrderFilteredByDateView(generics.ListAPIView):
-    # permission_classes = [IsOwnerOrStaffOrAdmin]
+    permission_classes = [IsAdminOrStaff]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
