@@ -178,7 +178,5 @@ if DATABASE_URL:
     DEBUG = False
 
 
-#Conectar ao add-on do PostgreSQL no ambiente do Heroku.
-django_on_heroku.settings(locals())
 
 
