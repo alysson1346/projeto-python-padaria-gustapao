@@ -27,7 +27,7 @@ class SerializerUpdateAccounts(serializers.ModelSerializer):
 class SerializerCreateCommonUserAccounts(serializers.ModelSerializer):
     class Meta:
         model = Account
-        exclude = ['last_login', 'groups', 'user_permissions', "id", "is_superuser", "is_staff", "is_active" ]
+        exclude = ['last_login', 'groups', 'user_permissions', "is_superuser", "is_staff", "is_active" ]
         read_only_fields  = ['date_joined' , 'is_active', 'is_superuser']
         extra_kwargs = {'password': {'write_only': True}}
 

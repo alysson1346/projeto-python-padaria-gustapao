@@ -25,7 +25,7 @@ from django.contrib.auth import authenticate
 class AccountView(SerializerByMethodMixin, generics.ListCreateAPIView):
     permission_classes = [ReadOnlyAdmin]
     queryset = Account.objects.all()
-
+    serializer_class = SerializerAccounts
     serializer_map = {
         'GET': SerializerAccounts,
         'POST': SerializerCreateCommonUserAccounts,
@@ -36,6 +36,7 @@ class CreateEmployee(SerializerByMethodMixin, generics.ListCreateAPIView):
     permission_classes = [OnlyAdmin]
 
     queryset = Account.objects.filter(is_staff=True)
+    serializer_class = SerializerEmployee
     serializer_map = {
         'GET': SerializerEmployee,
         'POST': SerializerEmployee,
@@ -47,6 +48,7 @@ class AcccountDetailView(SerializerByMethodMixin, generics.RetrieveUpdateDestroy
     permission_classes = [UpdateAndDelete]
 
     queryset = Account.objects.all()
+    serializer_class = SerializerAccounts,
     serializer_map = {
         'GET': SerializerAccounts,
         'PATCH': SerializerUpdateAccounts,
@@ -58,6 +60,7 @@ class UpgradeToAdminOrStaff(SerializerByMethodMixin, generics.UpdateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [OnlyAdmin]
 
+    serializer_class = UpgradeToAdminOrStaff
     queryset = Account.objects.all()
     serializer_map = {
         'PATCH': UpgradeToAdminOrStaff
@@ -68,6 +71,7 @@ class UpgradeToAdminOrStaff(SerializerByMethodMixin, generics.UpdateAPIView):
 class DeactivateAccountView(SerializerByMethodMixin, generics.UpdateAPIView):
     permission_classes = [OnlyAdmin]
 
+    serializer_class = SerializerDeactivate
     queryset = Account.objects.all()
     serializer_map = {
         'PATCH': SerializerDeactivate

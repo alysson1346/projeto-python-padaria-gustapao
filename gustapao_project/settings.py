@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 
 import dj_database_url
-import django_on_heroku
 import dotenv
 
 dotenv.load_dotenv()
@@ -32,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0','localhost', 'tcmgustapao.herokuapp.com']
 
 
 # Application definition
@@ -46,7 +45,9 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ['rest_framework', 'rest_framework.authtoken', 'drf_spectacular',]
+
+THIRD_PARTY_APPS = ['rest_framework', 'rest_framework.authtoken', 'drf_spectacular']
+
 
 MY_APPS= ['accounts', 'orders', 'products',]
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -100,7 +102,7 @@ else:
             "NAME": os.getenv("POSTGRES_DB"),
             "USER": os.getenv("POSTGRES_USER"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-            "HOST": "db",
+            "HOST": "127.0.0.1",
             "PORT": 5432,
         },
 
@@ -154,7 +156,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE' : 10,
+    'PAGE_SIZE' : 5,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -172,8 +174,11 @@ if DATABASE_URL:
         default=DATABASE_URL, conn_max_age=500, ssl_require=True
     )
     DATABASES['default'].update(db_from_env)
+
     DEBUG = False
+
 
 #Conectar ao add-on do PostgreSQL no ambiente do Heroku.
 django_on_heroku.settings(locals())
+
 

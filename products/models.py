@@ -17,6 +17,9 @@ def validate_file_size(file):
 
 
 class Product(models.Model):
+    class Meta:
+        ordering = ['-id']
+    
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=50, unique=True)
     image_file = models.ImageField(
@@ -37,10 +40,15 @@ class Product(models.Model):
 
 
 class Category(models.Model):
+    class Meta:
+        ordering = ['-id']
+    
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=50)
 
-
 class Ingredient(models.Model):
+    class Meta:
+        ordering = ['-id']
+    
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=50)
