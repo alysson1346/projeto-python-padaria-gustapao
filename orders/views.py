@@ -84,7 +84,9 @@ class OrderStatusView(SerializerByMethodMixin, generics.RetrieveUpdateAPIView):
     permission_classes = [IsAdminOrStaff]
     serializer_class = OrderStatusSerializer
     queryset = Order.objects.all()
-    serializer_class = OrderStatusSerializer
+    serializer_map = {
+        'PATCH':OrderStatusSerializer,
+    }
 
 
 class OrderForTodayView(generics.ListAPIView):
