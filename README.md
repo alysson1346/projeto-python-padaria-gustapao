@@ -83,6 +83,12 @@ Execute as migrações:
 python ./manage.py migrate
 ```
 
+Crie um superuser com o comando e preencha as informações solicitadas:
+
+```shell
+python ./manage.py createsuperuser
+```
+
 ### 2.2. Server
 
 Execute o comando para rodar o servidor na máquina local na porta 8000:
